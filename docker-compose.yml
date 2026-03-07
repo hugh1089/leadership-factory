@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=file:./dev.db
+      - NEXTAUTH_SECRET=change-this-in-production
+      - NEXTAUTH_URL=http://localhost:3000
+    volumes:
+      - ./data:/app/prisma
+    restart: unless-stopped

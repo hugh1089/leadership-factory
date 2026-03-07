@@ -1,11 +1,410 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String
+  role          String    @default("user")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  projects      Project[]
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  org         String   @default("")
+  description String   @default("")
+  status      String   @default("draft")
+  currentStep Int      @default(1)
+  revenue     Float    @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  charter        Charter?
+  businessNeeds  BusinessNeed[]
+  competencyGaps CompetencyGap[]
+  stakeholders   Stakeholder[]
+  personas       LearnerPersona[]
+  objectives     LearningObjective[]
+  journeyPhases  JourneyPhase[]
+  modules        CurriculumModule[]
+  assessments    Assessment[]
+  facilitators   Facilitator[]
+  calendarEvents CalendarEvent[]
+  learners       Learner[]
+  budgetItems    BudgetItem[]
+  commPlans      CommunicationPlan[]
+  risks          Risk[]
+  review         Review?
+  stepStatus     StepStatus[]
+  actionTeams    ActionLearningTeam[]
+  coachingSessions CoachingEngagement[]
+  knowledgeFiles KnowledgeFile[]
+}
+
+model StepStatus {
+  id        String @id @default(cuid())
+  step      Int
+  status    String @default("pending")
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@unique([projectId, step])
+}
+
+model Charter {
+  id              String  @id @default(cuid())
+  projectName     String  @default("")
+  orgName         String  @default("")
+  sponsor         String  @default("")
+  projectManager  String  @default("")
+  startDate       String  @default("")
+  endDate         String  @default("")
+  background      String  @default("")
+  targetAudience  String  @default("")
+  expectedOutcome String  @default("")
+  scope           String  @default("")
+  outOfScope      String  @default("")
+  successCriteria String  @default("")
+  constraints     String  @default("")
+  projectId       String  @unique
+  project         Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Stakeholder {
+  id            String  @id @default(cuid())
+  name          String  @default("")
+  role          String  @default("")
+  expectations  String  @default("")
+  influence     String  @default("中")
+  participation String  @default("中")
+  frequency     String  @default("")
+  method        String  @default("")
+  projectId     String
+  project       Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model BusinessNeed {
+  id            String  @id @default(cuid())
+  challenge     String  @default("")
+  strategic     String  @default("")
+  affectedRoles String  @default("")
+  expectedResult String @default("")
+  metric        String  @default("")
+  currentData   String  @default("")
+  targetData    String  @default("")
+  priority      String  @default("中")
+  projectId     String
+  project       Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model CompetencyGap {
+  id              String  @id @default(cuid())
+  dimension       String  @default("")
+  targetGroup     String  @default("")
+  currentLevel    Int     @default(0)
+  requiredLevel   Int     @default(0)
+  gapScore        Int     @default(0)
+  recommendation  String  @default("")
+  method          String  @default("")
+  priority        String  @default("中")
+  projectId       String
+  project         Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model LearnerPersona {
+  id           String  @id @default(cuid())
+  name         String  @default("")
+  age          String  @default("")
+  department   String  @default("")
+  position     String  @default("")
+  yearsExp     String  @default("")
+  mgmtYears    String  @default("")
+  traits       String  @default("")
+  motivation   String  @default("")
+  challenges   String  @default("")
+  learnStyle   String  @default("")
+  techLevel    String  @default("")
+  assessDisc   String  @default("")
+  assessMbti   String  @default("")
+  assess360    String  @default("")
+  assessCustom String  @default("")
+  trackNotes   String  @default("")
+  projectId    String
+  project      Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model LearningObjective {
+  id            String  @id @default(cuid())
+  moduleName    String  @default("")
+  objective     String  @default("")
+  bloomLevel    String  @default("")
+  competency    String  @default("")
+  businessGoal  String  @default("")
+  assessMethod  String  @default("")
+  assessTiming  String  @default("")
+  difficulty    Int     @default(3)
+  projectId     String
+  project       Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model JourneyPhase {
+  id           String  @id @default(cuid())
+  phase        String  @default("")
+  duration     String  @default("")
+  description  String  @default("")
+  activities   String  @default("")
+  emotion      String  @default("")
+  intervention String  @default("")
+  responsible  String  @default("")
+  criteria     String  @default("")
+  sortOrder    Int     @default(0)
+  projectId    String
+  project      Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model CurriculumModule {
+  id            String  @id @default(cuid())
+  code          String  @default("")
+  name          String  @default("")
+  topic         String  @default("")
+  objective     String  @default("")
+  method        String  @default("")
+  format        String  @default("")
+  hours         Float   @default(0)
+  facilitatorType String @default("")
+  competency    String  @default("")
+  businessAlign String  @default("")
+  sortOrder     Int     @default(0)
+  projectId     String
+  project       Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  sessions      SessionPlan[]
+}
+
+model SessionPlan {
+  id           String  @id @default(cuid())
+  timeSlot     String  @default("")
+  duration     Int     @default(0)
+  name         String  @default("")
+  objective    String  @default("")
+  activity     String  @default("")
+  facilitator  String  @default("")
+  materials    String  @default("")
+  assessment   String  @default("")
+  notes        String  @default("")
+  sortOrder    Int     @default(0)
+  moduleId     String
+  module       CurriculumModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+}
+
+model Assessment {
+  id           String  @id @default(cuid())
+  level        String  @default("")
+  name         String  @default("")
+  description  String  @default("")
+  tool         String  @default("")
+  timing       String  @default("")
+  target       String  @default("")
+  module       String  @default("")
+  dimension    String  @default("")
+  scoring      String  @default("")
+  baseline     String  @default("")
+  goalScore    String  @default("")
+  projectId    String
+  project      Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Facilitator {
+  id           String  @id @default(cuid())
+  name         String  @default("")
+  source       String  @default("")
+  expertise    String  @default("")
+  credentials  String  @default("")
+  module       String  @default("")
+  days         Float   @default(0)
+  dailyRate    Float   @default(0)
+  totalFee     Float   @default(0)
+  contractStatus String @default("pending")
+  lastScore    String  @default("")
+  renew        String  @default("")
+  contact      String  @default("")
+  projectId    String
+  project      Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model CalendarEvent {
+  id          String  @id @default(cuid())
+  type        String  @default("")
+  name        String  @default("")
+  month       String  @default("")
+  week        String  @default("")
+  date        String  @default("")
+  activityType String @default("")
+  summary     String  @default("")
+  responsible String  @default("")
+  coworker    String  @default("")
+  headcount   String  @default("")
+  status      String  @default("pending")
+  sortOrder   Int     @default(0)
+  projectId   String
+  project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Learner {
+  id          String  @id @default(cuid())
+  name        String  @default("")
+  department  String  @default("")
+  position    String  @default("")
+  yearsWork   String  @default("")
+  yearsMgmt   String  @default("")
+  supervisor  String  @default("")
+  phone       String  @default("")
+  email       String  @default("")
+  joinDate    String  @default("")
+  learnerType String  @default("正式")
+  fileNo      String  @default("")
+  attendance  String  @default("")
+  scores      String  @default("")
+  projectId   String
+  project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model BudgetItem {
+  id           String  @id @default(cuid())
+  category     String  @default("")
+  itemName     String  @default("")
+  feeType      String  @default("")
+  planPrice    Float   @default(0)
+  planQty      Float   @default(0)
+  planTotal    Float   @default(0)
+  actualPrice  Float   @default(0)
+  actualQty    Float   @default(0)
+  actualTotal  Float   @default(0)
+  variance     Float   @default(0)
+  status       String  @default("pending")
+  notes        String  @default("")
+  projectId    String
+  project      Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model CommunicationPlan {
+  id           String  @id @default(cuid())
+  stakeholder  String  @default("")
+  infoNeeds    String  @default("")
+  purpose      String  @default("")
+  frequency    String  @default("")
+  channel      String  @default("")
+  format       String  @default("")
+  initiator    String  @default("")
+  feedback     String  @default("")
+  projectId    String
+  project      Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Risk {
+  id           String  @id @default(cuid())
+  riskId       String  @default("")
+  description  String  @default("")
+  category     String  @default("")
+  probability  Int     @default(1)
+  impact       Int     @default(1)
+  riskScore    Int     @default(1)
+  strategy     String  @default("")
+  measures     String  @default("")
+  owner        String  @default("")
+  status       String  @default("监控中")
+  projectId    String
+  project      Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Review {
+  id            String  @id @default(cuid())
+  kpis          String  @default("[]")
+  aarGoal       String  @default("")
+  aarResult     String  @default("")
+  aarDiff       String  @default("")
+  aarCause      String  @default("")
+  aarKeep       String  @default("")
+  aarImprove    String  @default("")
+  highlights    String  @default("")
+  improvements  String  @default("")
+  nextPlan      String  @default("")
+  projectId     String  @unique
+  project       Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model ActionLearningTeam {
+  id          String  @id @default(cuid())
+  teamName    String  @default("")
+  topic       String  @default("")
+  description String  @default("")
+  members     String  @default("")
+  mentor      String  @default("")
+  phase       String  @default("组建")
+  startDate   String  @default("")
+  endDate     String  @default("")
+  milestone1  String  @default("")
+  milestone1Date String @default("")
+  milestone1Status String @default("pending")
+  milestone2  String  @default("")
+  milestone2Date String @default("")
+  milestone2Status String @default("pending")
+  milestone3  String  @default("")
+  milestone3Date String @default("")
+  milestone3Status String @default("pending")
+  deliverable String  @default("")
+  progressLog String  @default("")
+  score       String  @default("")
+  feedback    String  @default("")
+  projectId   String
+  project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model CoachingEngagement {
+  id           String  @id @default(cuid())
+  coacheeName  String  @default("")
+  coachName    String  @default("")
+  coachType    String  @default("")
+  goal         String  @default("")
+  goalSmart    String  @default("")
+  phase        String  @default("匹配")
+  sessionsPlanned Int  @default(6)
+  sessionsCompleted Int @default(0)
+  sessionLog   String  @default("[]")
+  startDate    String  @default("")
+  endDate      String  @default("")
+  preScore     String  @default("")
+  postScore    String  @default("")
+  outcome      String  @default("")
+  coacheeReflection String @default("")
+  managerFeedback String @default("")
+  projectId    String
+  project      Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model KnowledgeFile {
+  id          String   @id @default(cuid())
+  stepKey     String   @default("")
+  title       String   @default("")
+  fileType    String   @default("")
+  category    String   @default("")
+  description String   @default("")
+  fileName    String   @default("")
+  fileSize    Int      @default(0)
+  filePath    String   @default("")
+  uploadedBy  String   @default("")
+  createdAt   DateTime @default(now())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 }

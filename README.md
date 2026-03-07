@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 学习项目设计工作台 | Learning Project Design Workbench
 
-## Getting Started
+基于标准化的学习项目设计全景工具手册（16张CSV工作表），构建的引导式项目设计Web工作台。
 
-First, run the development server:
+## 功能特性
+
+- **6阶段15步骤引导式流程**：从项目章程到项目复盘，全流程覆盖
+- **数据自动流转**：TNA → 学习目标 → 课程架构 → 讲师/预算/日历，上下游自动关联
+- **模板预填**：内置行业最佳实践模板（干系人、风险、沟通计划等）
+- **Excel全量导出**：15个Sheet带格式导出，保持原有模板结构
+- **风险矩阵热力图**：5x5概率-影响矩阵可视化
+- **预算自动汇总**：实时计算计划vs实际差异、人均成本
+
+## 技术栈
+
+- Next.js 16 (App Router + Turbopack)
+- Tailwind CSS + shadcn/ui
+- Prisma + SQLite
+- React Hook Form + Zod
+- ExcelJS（Excel导出）
+- TypeScript
+
+## 快速开始
 
 ```bash
+# 安装依赖
+npm install
+
+# 初始化数据库
+npx prisma migrate dev
+
+# 启动开发服务器
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+访问 http://localhost:3000，注册账号后即可开始使用。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Docker 部署
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+docker-compose up -d
+```
 
-## Learn More
+## 工作流（6阶段）
 
-To learn more about Next.js, take a look at the following resources:
+| 阶段 | 步骤 | 说明 |
+|------|------|------|
+| 项目定义 | 01 项目章程 / 02 需求分析TNA | 明确项目范围和培训需求 |
+| 学员与目标 | 03 学员画像 / 04 学习目标矩阵 | 刻画学员特征，设定学习目标 |
+| 方案设计 | 05 学习旅程 / 06 课程架构 / 07 单元详案 | 设计完整的学习方案 |
+| 保障体系 | 08 评估体系 / 09 讲师管理 / 10 预算追踪 | 建立质量和资源保障 |
+| 运营执行 | 11 运营日历 / 12 学员管理 / 13 沟通计划 / 14 风险管理 | 运营执行全流程管理 |
+| 复盘总结 | 15 项目复盘 | AAR复盘，提炼经验 |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 数据联动规则
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- 项目章程 → 沟通计划（干系人自动导入）
+- TNA能力差距 → 学习目标矩阵（自动映射）
+- 课程架构 → 讲师管理/预算追踪/运营日历（模块自动同步）
+- 学员人数 → 预算人均成本（自动计算）
+- 评估体系 → 项目复盘（KPI关联）

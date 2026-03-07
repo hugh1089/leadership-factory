@@ -1,65 +1,94 @@
-import Image from "next/image";
+import { getSession } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import { LoginForm } from "@/components/auth/login-form";
 
-export default function Home() {
+export default async function HomePage() {
+  const session = await getSession();
+  if (session) redirect("/dashboard");
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="min-h-screen flex">
+      {/* Left Panel - Branding */}
+      <div className="hidden lg:flex lg:w-[55%] bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white flex-col justify-between p-12 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(circle at 20% 50%, rgba(59,130,246,0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(99,102,241,0.2) 0%, transparent 50%)" }} />
+
+        <div className="relative z-10">
+          <div className="flex items-center gap-3 mb-12">
+            <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center text-lg font-bold">LF</div>
+            <div>
+              <h1 className="text-lg font-bold tracking-wide">Leadership Factory</h1>
+              <p className="text-xs text-blue-300 tracking-widest">学习项目设计全景工作台</p>
+            </div>
+          </div>
+
+          <p className="text-xs uppercase tracking-[0.3em] text-blue-400 mb-4">PLATFORM MISSION</p>
+          <h2 className="text-4xl font-bold leading-tight mb-2">成为和成就</h2>
+          <h2 className="text-4xl font-bold leading-tight mb-6">卓越的领导者</h2>
+          <p className="text-sm text-slate-300 leading-relaxed max-w-lg mb-12">
+            自上而下体系设计 x 自下而上原子积累<br />
+            从需求分析到项目复盘的全流程数字化工作台<br />
+            让每一个领导力发展项目都有据可依、有迹可循
           </p>
+
+          <div className="grid grid-cols-4 gap-4 mb-12">
+            <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
+              <div className="text-2xl font-bold text-blue-300">17</div>
+              <div className="text-xs text-slate-400 mt-1">标准工作流</div>
+            </div>
+            <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
+              <div className="text-2xl font-bold text-blue-300">7</div>
+              <div className="text-xs text-slate-400 mt-1">核心阶段</div>
+            </div>
+            <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
+              <div className="text-2xl font-bold text-blue-300">15+</div>
+              <div className="text-xs text-slate-400 mt-1">预设模板</div>
+            </div>
+            <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
+              <div className="text-2xl font-bold text-blue-300">1键</div>
+              <div className="text-xs text-slate-400 mt-1">Excel 导出</div>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="relative z-10 space-y-3">
+          <p className="text-xs uppercase tracking-[0.2em] text-blue-400 mb-3">核心能力</p>
+          <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10">
+            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-sm font-bold">A</div>
+            <div>
+              <p className="text-sm font-medium">项目设计与运营</p>
+              <p className="text-xs text-slate-400">TNA · 课程设计 · 学习旅程 · 评估体系</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10">
+            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-sm font-bold">B</div>
+            <div>
+              <p className="text-sm font-medium">实践深化</p>
+              <p className="text-xs text-slate-400">行动学习 · 教练辅导 · 知识管理</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10">
+            <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center text-sm font-bold">C</div>
+            <div>
+              <p className="text-sm font-medium">数据驱动</p>
+              <p className="text-xs text-slate-400">数据追踪 · Excel导出 · 管理后台</p>
+            </div>
+          </div>
         </div>
-      </main>
+      </div>
+
+      {/* Right Panel - Login */}
+      <div className="flex-1 flex items-center justify-center bg-slate-50 p-8">
+        <div className="w-full max-w-md">
+          <div className="lg:hidden text-center mb-8">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white text-sm font-bold">LF</div>
+              <span className="text-lg font-bold text-slate-900">Leadership Factory</span>
+            </div>
+            <p className="text-sm text-slate-500">学习项目设计全景工作台</p>
+          </div>
+          <LoginForm />
+        </div>
+      </div>
     </div>
   );
 }
