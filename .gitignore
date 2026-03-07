@@ -25,6 +25,9 @@ src/generated/
 .env.local
 .env.production
 
+# local deploy config (contains SSH secrets)
+.deploy.env
+
 # misc
 .DS_Store
 *.tsbuildinfo
