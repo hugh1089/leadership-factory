@@ -161,8 +161,8 @@ export function EditableTable({ columns, data: initialData, onSave, templateRows
                       <Input
                         type="number"
                         className="h-9 text-xs"
-                        value={row[col.key] != null && row[col.key] !== "" ? String(row[col.key]) : ""}
-                        onChange={(e) => updateCell(ri, col.key, e.target.value === "" ? 0 : Number(e.target.value))}
+                        value={row[col.key] as number || ""}
+                        onChange={(e) => updateCell(ri, col.key, Number(e.target.value) || 0)}
                         placeholder={col.placeholder}
                       />
                     ) : col.type === "textarea" ? (

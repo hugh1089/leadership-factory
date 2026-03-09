@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { EditableTable, ColumnDef } from "@/components/shared/editable-table";
 import { saveBudgetItems } from "@/lib/actions";
 import { BUDGET_CATEGORIES } from "@/lib/templates";
-import { useToast } from "@/components/ui/toast-provider";
 
 const columns: ColumnDef[] = [
   { key: "category", label: "费用类别", type: "select", width: "140px", options: BUDGET_CATEGORIES.map((c) => ({ value: c.category, label: `${c.category} ${c.label}` })) },
@@ -44,7 +43,6 @@ export function BudgetForm({ projectId, budgetItems, facilitatorCount, learnerCo
   const [revenue, setRevenue] = useState(initialRevenue);
   const [savingRevenue, setSavingRevenue] = useState(false);
   const [liveItems, setLiveItems] = useState(budgetItems);
-  const { showToast } = useToast();
 
   const handleItemsChange = useCallback((rows: Array<Record<string, unknown>>) => {
     setLiveItems(rows);
@@ -74,15 +72,11 @@ export function BudgetForm({ projectId, budgetItems, facilitatorCount, learnerCo
   const handleSaveRevenue = async () => {
     setSavingRevenue(true);
     try {
-      const res = await fetch(`/api/projects/${projectId}/revenue`, {
+      await fetch(`/api/projects/${projectId}/revenue`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ revenue }),
       });
-      if (!res.ok) throw new Error();
-      showToast("报价已保存");
-    } catch {
-      showToast("保存报价失败", "error");
     } finally { setSavingRevenue(false); }
   };
 
@@ -206,8 +200,6 @@ export function BudgetForm({ projectId, budgetItems, facilitatorCount, learnerCo
             data={budgetItems}
             onSave={async (data) => { await saveBudgetItems(projectId, data); }}
             addLabel="添加费用项"
-            onChange={handleItemsChange}
-            computeRow={computeBudgetRow}
           />
         </CardContent>
       </Card>

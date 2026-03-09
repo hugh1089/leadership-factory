@@ -176,7 +176,7 @@ export function PersonaForm({ projectId, personas }: { projectId: string; person
               <CardTitle className="text-base">画像 {idx + 1}: {p.name || "未命名"}</CardTitle>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={() => handleDownload(idx)}>下载此画像</Button>
-                <Button variant="ghost" size="sm" className="text-destructive" onClick={() => { setItems((prev) => prev.filter((_, i) => i !== idx)); dirtyRef.current = true; setDirty(true); }}>
+                <Button variant="ghost" size="sm" className="text-destructive" onClick={() => { setItems((prev) => prev.filter((_, i) => i !== idx)); dirtyRef.current = true; }}>
                   删除画像
                 </Button>
               </div>
@@ -306,11 +306,11 @@ export function PersonaForm({ projectId, personas }: { projectId: string; person
       ))}
 
       <div className="flex items-center gap-2 flex-wrap">
-        <Button variant="outline" onClick={() => { setItems((prev) => [...prev, { ...emptyPersona }]); dirtyRef.current = true; setDirty(true); }}>
+        <Button variant="outline" onClick={() => { setItems((prev) => [...prev, { ...emptyPersona }]); dirtyRef.current = true; }}>
           添加画像
         </Button>
         {items.length === 0 && (
-          <Button variant="outline" className="text-blue-600" onClick={() => { setItems(PERSONA_TEMPLATES); dirtyRef.current = true; setDirty(true); }}>
+          <Button variant="outline" className="text-blue-600" onClick={() => { setItems(PERSONA_TEMPLATES); dirtyRef.current = true; }}>
             使用示例模板
           </Button>
         )}
@@ -320,7 +320,6 @@ export function PersonaForm({ projectId, personas }: { projectId: string; person
           </Button>
         )}
         <div className="flex-1" />
-        {dirty && <span className="text-xs text-amber-500">● 有未保存的更改</span>}
         <Button onClick={handleSave} disabled={saving}>{saving ? "保存中..." : "保存画像"}</Button>
       </div>
     </div>

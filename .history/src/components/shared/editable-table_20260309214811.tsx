@@ -47,7 +47,6 @@ export function EditableTable({ columns, data: initialData, onSave, templateRows
 
   useEffect(() => { rowsRef.current = rows; }, [rows]);
   useEffect(() => { dirtyRef.current = dirty; }, [dirty]);
-  useEffect(() => { onChange?.(rows); }, [rows]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Auto-save every N minutes if dirty
   useEffect(() => {
@@ -65,13 +64,9 @@ export function EditableTable({ columns, data: initialData, onSave, templateRows
   }, [onSave, autoSaveInterval, showToast]);
 
   const updateCell = useCallback((rowIdx: number, key: string, value: unknown) => {
-    setRows((prev) => prev.map((r, i) => {
-      if (i !== rowIdx) return r;
-      const updated = { ...r, [key]: value };
-      return computeRow ? computeRow(updated, key, value) : updated;
-    }));
+    setRows((prev) => prev.map((r, i) => (i === rowIdx ? { ...r, [key]: value } : r)));
     setDirty(true);
-  }, [computeRow]);
+  }, []);
 
   const addRow = () => {
     const empty: Record<string, unknown> = {};
@@ -161,8 +156,8 @@ export function EditableTable({ columns, data: initialData, onSave, templateRows
                       <Input
                         type="number"
                         className="h-9 text-xs"
-                        value={row[col.key] != null && row[col.key] !== "" ? String(row[col.key]) : ""}
-                        onChange={(e) => updateCell(ri, col.key, e.target.value === "" ? 0 : Number(e.target.value))}
+                        value={row[col.key] as number || ""}
+                        onChange={(e) => updateCell(ri, col.key, Number(e.target.value) || 0)}
                         placeholder={col.placeholder}
                       />
                     ) : col.type === "textarea" ? (

@@ -44,7 +44,6 @@ export function BudgetForm({ projectId, budgetItems, facilitatorCount, learnerCo
   const [revenue, setRevenue] = useState(initialRevenue);
   const [savingRevenue, setSavingRevenue] = useState(false);
   const [liveItems, setLiveItems] = useState(budgetItems);
-  const { showToast } = useToast();
 
   const handleItemsChange = useCallback((rows: Array<Record<string, unknown>>) => {
     setLiveItems(rows);
@@ -74,15 +73,11 @@ export function BudgetForm({ projectId, budgetItems, facilitatorCount, learnerCo
   const handleSaveRevenue = async () => {
     setSavingRevenue(true);
     try {
-      const res = await fetch(`/api/projects/${projectId}/revenue`, {
+      await fetch(`/api/projects/${projectId}/revenue`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ revenue }),
       });
-      if (!res.ok) throw new Error();
-      showToast("报价已保存");
-    } catch {
-      showToast("保存报价失败", "error");
     } finally { setSavingRevenue(false); }
   };
 
