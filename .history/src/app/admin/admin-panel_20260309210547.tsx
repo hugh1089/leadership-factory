@@ -149,7 +149,7 @@ export function AdminPanel({ projects, users }: { projects: ProjectRow[]; users:
       </header>
 
       <main className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-5 gap-4 mb-6">
+        <div className="grid grid-cols-4 gap-4 mb-6">
           <Card>
             <CardContent className="py-4 text-center">
               <div className="text-2xl font-bold text-primary">{projects.length}</div>
@@ -164,19 +164,13 @@ export function AdminPanel({ projects, users }: { projects: ProjectRow[]; users:
           </Card>
           <Card>
             <CardContent className="py-4 text-center">
-              <div className="text-2xl font-bold text-amber-600">{totalLearners}</div>
+              <div className="text-2xl font-bold text-amber-600">{projects.reduce((s, p) => s + p.learnerCount, 0)}</div>
               <div className="text-xs text-muted-foreground">学员总数</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="py-4 text-center">
-              <div className="text-2xl font-bold text-blue-600">{avgProgress}%</div>
-              <div className="text-xs text-muted-foreground">平均进度</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="py-4 text-center">
-              <div className="text-2xl font-bold text-slate-600">{completedProjects}</div>
+              <div className="text-2xl font-bold text-slate-600">{projects.filter((p) => p.status === "completed").length}</div>
               <div className="text-xs text-muted-foreground">已完成项目</div>
             </CardContent>
           </Card>
@@ -247,14 +241,9 @@ export function AdminPanel({ projects, users }: { projects: ProjectRow[]; users:
                           <td className="py-2 px-3 text-center">{p.learnerCount}</td>
                           <td className="py-2 px-3 text-muted-foreground">{p.updatedAt}</td>
                           <td className="py-2 px-3">
-                            <div className="flex items-center gap-1">
-                              <Link href={`/projects/${p.id}/charter`}>
-                                <Button size="sm" variant="ghost" className="text-blue-600">查看</Button>
-                              </Link>
-                              <Button size="sm" variant="ghost" onClick={() => window.open(`/api/export/${p.id}`, "_blank")}>
-                                下载
-                              </Button>
-                            </div>
+                            <Button size="sm" variant="ghost" onClick={() => window.open(`/api/export/${p.id}`, "_blank")}>
+                              下载
+                            </Button>
                           </td>
                         </tr>
                       ))}
@@ -281,7 +270,6 @@ export function AdminPanel({ projects, users }: { projects: ProjectRow[]; users:
                       <th className="py-2 px-3 text-center">角色</th>
                       <th className="py-2 px-3 text-center">项目数</th>
                       <th className="py-2 px-3 text-left">注册时间</th>
-                      <th className="py-2 px-3 text-left">操作</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -296,13 +284,6 @@ export function AdminPanel({ projects, users }: { projects: ProjectRow[]; users:
                         </td>
                         <td className="py-2 px-3 text-center">{u.projectCount}</td>
                         <td className="py-2 px-3 text-muted-foreground">{u.createdAt}</td>
-                        <td className="py-2 px-3">
-                          {u.role !== "admin" && (
-                            <Button size="sm" variant="ghost" className="text-blue-600" disabled={promoting === u.id} onClick={() => handlePromote(u.id)}>
-                              {promoting === u.id ? "..." : "设为管理员"}
-                            </Button>
-                          )}
-                        </td>
                       </tr>
                     ))}
                   </tbody>

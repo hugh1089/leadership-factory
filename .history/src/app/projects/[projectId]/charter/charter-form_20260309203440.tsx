@@ -234,8 +234,7 @@ export function CharterForm({
             <Label>约束条件</Label>
             <Textarea rows={2} value={form.constraints} onChange={(e) => update("constraints", e.target.value)} placeholder="时间、预算、资源等约束条件..." />
           </div>
-          <div className="flex justify-end gap-2">
-            {dirtyRef.current && <span className="text-xs text-amber-500 self-center">● 有未保存的更改</span>}
+          <div className="flex justify-end">
             <Button onClick={handleSaveCharter} disabled={saving}>
               {saving ? "保存中..." : "保存章程"}
             </Button>

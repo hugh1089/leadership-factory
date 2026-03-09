@@ -166,7 +166,6 @@ model LearningObjective {
 model JourneyPhase {
   id           String  @id @default(cuid())
   phase        String  @default("")
-  startDate    String  @default("")
   duration     String  @default("")
   description  String  @default("")
   activities   String  @default("")
@@ -185,7 +184,6 @@ model CurriculumModule {
   name          String  @default("")
   topic         String  @default("")
   objective     String  @default("")
-  outline       String  @default("")
   method        String  @default("")
   format        String  @default("")
   hours         Float   @default(0)

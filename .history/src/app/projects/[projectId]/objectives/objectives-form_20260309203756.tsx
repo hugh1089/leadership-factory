@@ -148,7 +148,7 @@ export function ObjectivesForm({ projectId, objectives, competencyGaps }: Props)
         </CardHeader>
         <CardContent>
           <EditableTable
-            columns={wideColumns}
+            columns={columns}
             data={data}
             onSave={async (rows) => { await saveObjectives(projectId, rows); }}
             addLabel="添加学习目标"

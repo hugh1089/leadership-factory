@@ -296,13 +296,6 @@ export function AdminPanel({ projects, users }: { projects: ProjectRow[]; users:
                         </td>
                         <td className="py-2 px-3 text-center">{u.projectCount}</td>
                         <td className="py-2 px-3 text-muted-foreground">{u.createdAt}</td>
-                        <td className="py-2 px-3">
-                          {u.role !== "admin" && (
-                            <Button size="sm" variant="ghost" className="text-blue-600" disabled={promoting === u.id} onClick={() => handlePromote(u.id)}>
-                              {promoting === u.id ? "..." : "设为管理员"}
-                            </Button>
-                          )}
-                        </td>
                       </tr>
                     ))}
                   </tbody>

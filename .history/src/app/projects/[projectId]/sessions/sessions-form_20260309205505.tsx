@@ -52,7 +52,6 @@ export function SessionsForm({ projectId, modules }: { projectId: string; module
               data={mod.sessions}
               onSave={async (data) => { await saveSessionPlans(mod.id, data, projectId); }}
               addLabel="添加时间块"
-              minWidth="1200px"
             />
           </CardContent>
         </Card>

@@ -23,10 +23,9 @@ interface Props {
   templateRows?: Array<Record<string, unknown>>;
   addLabel?: string;
   autoSaveInterval?: number; // ms, default 180000 (3min)
-  minWidth?: string; // min-width for the table container
 }
 
-export function EditableTable({ columns, data: initialData, onSave, templateRows, addLabel = "添加行", autoSaveInterval = 180000, minWidth }: Props) {
+export function EditableTable({ columns, data: initialData, onSave, templateRows, addLabel = "添加行", autoSaveInterval = 180000 }: Props) {
   const [rows, setRows] = useState<Array<Record<string, unknown>>>(
     initialData.length > 0 ? initialData : []
   );
@@ -112,7 +111,7 @@ export function EditableTable({ columns, data: initialData, onSave, templateRows
   return (
     <div>
       <div className="overflow-x-auto border rounded-lg">
-        <table className="w-full text-sm" style={minWidth ? { minWidth } : undefined}>
+        <table className="w-full text-sm">
           <thead className="bg-slate-50 border-b">
             <tr>
               <th className="px-2 py-2 text-left text-xs font-medium text-slate-500 w-10">#</th>

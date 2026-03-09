@@ -213,11 +213,6 @@ export function KnowledgePanel({ projectId, files, stepOptions, userName }: {
                   {CATEGORIES.map((c) => <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>)}
                 </SelectContent>
               </Select>
-              {filtered.length > 0 && (
-                <Button size="sm" variant="outline" onClick={handleBatchDownload}>
-                  批量下载 ({filtered.length})
-                </Button>
-              )}
             </div>
           </div>
         </CardHeader>

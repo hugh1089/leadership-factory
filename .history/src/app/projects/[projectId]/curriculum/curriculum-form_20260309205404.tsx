@@ -40,7 +40,6 @@ export function CurriculumForm({ projectId, modules }: { projectId: string; modu
             onSave={async (data) => { await saveCurriculumModules(projectId, data); }}
             templateRows={moduleTemplates}
             addLabel="添加模块"
-            minWidth="1600px"
           />
         </CardContent>
       </Card>

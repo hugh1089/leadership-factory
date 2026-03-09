@@ -185,30 +185,15 @@ export function CharterForm({
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label>项目背景</Label>
-            <div className="flex flex-wrap gap-1 mb-1">
-              {BACKGROUND_PRESETS.map((t, i) => (
-                <button key={i} type="button" onClick={() => appendToField("background", t)} className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded hover:bg-blue-100 transition-colors">+ {t.slice(0, 15)}...</button>
-              ))}
-            </div>
-            <Textarea rows={4} value={form.background} onChange={(e) => update("background", e.target.value)} placeholder="描述项目发起的业务背景和动因（可点击上方快速添加）..." />
+            <Textarea rows={3} value={form.background} onChange={(e) => update("background", e.target.value)} placeholder="描述项目发起的业务背景和动因..." />
           </div>
           <div className="space-y-2">
             <Label>目标学员群体</Label>
-            <div className="flex flex-wrap gap-1 mb-1">
-              {AUDIENCE_PRESETS.map((t, i) => (
-                <button key={i} type="button" onClick={() => update("targetAudience", t)} className="text-xs bg-emerald-50 text-emerald-700 px-2 py-1 rounded hover:bg-emerald-100 transition-colors">+ {t.slice(0, 18)}...</button>
-              ))}
-            </div>
-            <Textarea rows={3} value={form.targetAudience} onChange={(e) => update("targetAudience", e.target.value)} placeholder="描述学员群体特征（可点击上方选择或自行输入）..." />
+            <Textarea rows={2} value={form.targetAudience} onChange={(e) => update("targetAudience", e.target.value)} placeholder="描述学员群体特征（层级、人数、部门等）..." />
           </div>
           <div className="space-y-2">
             <Label>预期成果</Label>
-            <div className="flex flex-wrap gap-1 mb-1">
-              {OUTCOME_PRESETS.map((t, i) => (
-                <button key={i} type="button" onClick={() => appendToField("expectedOutcome", t)} className="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded hover:bg-amber-100 transition-colors">+ {t.slice(0, 18)}...</button>
-              ))}
-            </div>
-            <Textarea rows={3} value={form.expectedOutcome} onChange={(e) => update("expectedOutcome", e.target.value)} placeholder="项目完成后期望达到的效果（可点击上方快速添加）..." />
+            <Textarea rows={2} value={form.expectedOutcome} onChange={(e) => update("expectedOutcome", e.target.value)} placeholder="项目完成后期望达到的效果..." />
           </div>
         </CardContent>
       </Card>
@@ -234,8 +219,7 @@ export function CharterForm({
             <Label>约束条件</Label>
             <Textarea rows={2} value={form.constraints} onChange={(e) => update("constraints", e.target.value)} placeholder="时间、预算、资源等约束条件..." />
           </div>
-          <div className="flex justify-end gap-2">
-            {dirtyRef.current && <span className="text-xs text-amber-500 self-center">● 有未保存的更改</span>}
+          <div className="flex justify-end">
             <Button onClick={handleSaveCharter} disabled={saving}>
               {saving ? "保存中..." : "保存章程"}
             </Button>

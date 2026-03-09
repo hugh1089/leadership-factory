@@ -155,7 +155,7 @@ export function ActionLearningForm({ projectId, teams, learners }: { projectId: 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>会议场次</Label>
-                <Select value={sessionCount} onValueChange={(v) => setSessionCount(v ?? "4")}>
+                <Select value={sessionCount} onValueChange={setSessionCount}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     {SESSION_COUNT_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
@@ -164,7 +164,7 @@ export function ActionLearningForm({ projectId, teams, learners }: { projectId: 
               </div>
               <div className="space-y-2">
                 <Label>课题模式</Label>
-                <Select value={topicMode} onValueChange={(v) => setTopicMode(v ?? "team")}>
+                <Select value={topicMode} onValueChange={setTopicMode}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     {TOPIC_MODE_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}

@@ -27,9 +27,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}>
-        <ToastProvider>
-          <TooltipProvider>{children}</TooltipProvider>
-        </ToastProvider>
+        <TooltipProvider>{children}</TooltipProvider>
       </body>
     </html>
   );

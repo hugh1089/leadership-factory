@@ -48,35 +48,6 @@ const stakeholderColumns: ColumnDef[] = [
   { key: "method", label: "沟通方式", placeholder: "邮件/会议" },
 ];
 
-const BACKGROUND_PRESETS = [
-  "组织战略转型，需要培养变革领导力",
-  "新业务拓展，需要提升管理团队经营能力",
-  "高管继任计划，加速高潜人才成长",
-  "组织合并/重组后的文化融合与团队建设",
-  "新晋管理者角色转型与能力提升",
-  "业务快速扩张，管理能力跟不上业务发展",
-  "绩效考核结果显示管理层能力差距明显",
-  "员工敬业度调查反映管理水平需要提升",
-];
-
-const AUDIENCE_PRESETS = [
-  "中层管理者（总监/高级经理级别），30-50人",
-  "高潜人才（后备干部池），20-30人",
-  "新晋管理者（管理经验1-3年），20-40人",
-  "高管团队（VP及以上），10-15人",
-  "业务部门负责人及核心骨干，25-35人",
-  "跨部门项目经理/敏捷团队负责人，15-25人",
-];
-
-const OUTCOME_PRESETS = [
-  "管理者领导力测评得分提升15%以上",
-  "团队敬业度分数提升10%以上",
-  "关键岗位继任准备度从40%提升至70%",
-  "跨部门协作项目成功率提升20%",
-  "管理者教练式领导行为转化率80%以上",
-  "行动学习课题产出可落地方案并启动实施",
-];
-
 export function CharterForm({
   projectId,
   charter,
@@ -87,7 +58,6 @@ export function CharterForm({
   stakeholders: StakeholderData[];
 }) {
   const [saving, setSaving] = useState(false);
-  const { showToast } = useToast();
   const [form, setForm] = useState<CharterData>({
     projectName: charter?.projectName || "",
     orgName: charter?.orgName || "",
@@ -103,50 +73,13 @@ export function CharterForm({
     successCriteria: charter?.successCriteria || "",
     constraints: charter?.constraints || "",
   });
-  const formRef = useRef(form);
-  const dirtyRef = useRef(false);
 
-  useEffect(() => { formRef.current = form; }, [form]);
-
-  const update = (key: keyof CharterData, value: string) => {
-    setForm((p) => ({ ...p, [key]: value }));
-    dirtyRef.current = true;
-  };
-
-  // Auto-save every 3 minutes
-  useEffect(() => {
-    const timer = setInterval(async () => {
-      if (dirtyRef.current) {
-        try {
-          await saveCharter(projectId, formRef.current as unknown as Record<string, string>);
-          dirtyRef.current = false;
-          showToast("已自动保存", "info");
-        } catch { /* silent */ }
-      }
-    }, 180000);
-    return () => clearInterval(timer);
-  }, [projectId, showToast]);
+  const update = (key: keyof CharterData, value: string) => setForm((p) => ({ ...p, [key]: value }));
 
   const handleSaveCharter = async () => {
     setSaving(true);
-    try {
-      await saveCharter(projectId, form as unknown as Record<string, string>);
-      dirtyRef.current = false;
-      showToast("保存成功");
-    } catch {
-      showToast("保存失败", "error");
-    } finally {
-      setSaving(false);
-    }
+    try { await saveCharter(projectId, form as unknown as Record<string, string>); } finally { setSaving(false); }
   };
-
-  const appendToField = useCallback((key: keyof CharterData, text: string) => {
-    setForm((p) => ({
-      ...p,
-      [key]: p[key] ? p[key] + "\n" + text : text,
-    }));
-    dirtyRef.current = true;
-  }, []);
 
   return (
     <div className="space-y-6">
@@ -185,30 +118,15 @@ export function CharterForm({
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label>项目背景</Label>
-            <div className="flex flex-wrap gap-1 mb-1">
-              {BACKGROUND_PRESETS.map((t, i) => (
-                <button key={i} type="button" onClick={() => appendToField("background", t)} className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded hover:bg-blue-100 transition-colors">+ {t.slice(0, 15)}...</button>
-              ))}
-            </div>
-            <Textarea rows={4} value={form.background} onChange={(e) => update("background", e.target.value)} placeholder="描述项目发起的业务背景和动因（可点击上方快速添加）..." />
+            <Textarea rows={3} value={form.background} onChange={(e) => update("background", e.target.value)} placeholder="描述项目发起的业务背景和动因..." />
           </div>
           <div className="space-y-2">
             <Label>目标学员群体</Label>
-            <div className="flex flex-wrap gap-1 mb-1">
-              {AUDIENCE_PRESETS.map((t, i) => (
-                <button key={i} type="button" onClick={() => update("targetAudience", t)} className="text-xs bg-emerald-50 text-emerald-700 px-2 py-1 rounded hover:bg-emerald-100 transition-colors">+ {t.slice(0, 18)}...</button>
-              ))}
-            </div>
-            <Textarea rows={3} value={form.targetAudience} onChange={(e) => update("targetAudience", e.target.value)} placeholder="描述学员群体特征（可点击上方选择或自行输入）..." />
+            <Textarea rows={2} value={form.targetAudience} onChange={(e) => update("targetAudience", e.target.value)} placeholder="描述学员群体特征（层级、人数、部门等）..." />
           </div>
           <div className="space-y-2">
             <Label>预期成果</Label>
-            <div className="flex flex-wrap gap-1 mb-1">
-              {OUTCOME_PRESETS.map((t, i) => (
-                <button key={i} type="button" onClick={() => appendToField("expectedOutcome", t)} className="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded hover:bg-amber-100 transition-colors">+ {t.slice(0, 18)}...</button>
-              ))}
-            </div>
-            <Textarea rows={3} value={form.expectedOutcome} onChange={(e) => update("expectedOutcome", e.target.value)} placeholder="项目完成后期望达到的效果（可点击上方快速添加）..." />
+            <Textarea rows={2} value={form.expectedOutcome} onChange={(e) => update("expectedOutcome", e.target.value)} placeholder="项目完成后期望达到的效果..." />
           </div>
         </CardContent>
       </Card>
@@ -234,8 +152,7 @@ export function CharterForm({
             <Label>约束条件</Label>
             <Textarea rows={2} value={form.constraints} onChange={(e) => update("constraints", e.target.value)} placeholder="时间、预算、资源等约束条件..." />
           </div>
-          <div className="flex justify-end gap-2">
-            {dirtyRef.current && <span className="text-xs text-amber-500 self-center">● 有未保存的更改</span>}
+          <div className="flex justify-end">
             <Button onClick={handleSaveCharter} disabled={saving}>
               {saving ? "保存中..." : "保存章程"}
             </Button>
