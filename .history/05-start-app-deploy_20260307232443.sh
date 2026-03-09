@@ -32,7 +32,7 @@ if [ -z "${PORT:-}" ]; then
   exit 1
 fi
 
-HOSTNAME="0.0.0.0"
+HOSTNAME="${HOSTNAME:-0.0.0.0}"
 export PORT HOSTNAME
 
 pm2 flush "$APP_NAME" || true
